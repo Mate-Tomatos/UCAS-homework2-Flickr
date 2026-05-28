@@ -116,7 +116,10 @@ def evalrank(model_path, data_path=None, split='dev', fold5=False):
     used for evaluation.
     """
     # load model and options
-    checkpoint = torch.load(model_path)
+    try:
+        checkpoint = torch.load(model_path, weights_only=False)
+    except TypeError:
+        checkpoint = torch.load(model_path)
     opt = checkpoint['opt']
     if data_path is not None:
         opt.data_path = data_path
@@ -140,7 +143,7 @@ def evalrank(model_path, data_path=None, split='dev', fold5=False):
     print('Computing results...')
     img_embs, cap_embs = encode_data(model, data_loader)
     print('Images: %d, Captions: %d' %
-          (img_embs.shape[0] / 5, cap_embs.shape[0]))
+          (img_embs.shape[0] // 5, cap_embs.shape[0]))
 
     if not fold5:
         # no cross-validation, full evaluation
@@ -198,7 +201,7 @@ def i2t(images, captions, npts=None, measure='cosine', return_ranks=False):
     Captions: (5N, K) matrix of captions
     """
     if npts is None:
-        npts = images.shape[0] / 5
+        npts = images.shape[0] // 5
     index_list = []
 
     ranks = numpy.zeros(npts)
@@ -251,7 +254,7 @@ def t2i(images, captions, npts=None, measure='cosine', return_ranks=False):
     Captions: (5N, K) matrix of captions
     """
     if npts is None:
-        npts = images.shape[0] / 5
+        npts = images.shape[0] // 5
     ims = numpy.array([images[i] for i in range(0, len(images), 5)])
 
     ranks = numpy.zeros(5 * npts)

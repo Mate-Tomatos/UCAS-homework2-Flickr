@@ -534,8 +534,8 @@ class VSRN(object):
         """Compute the loss given pairs of image and caption embeddings
         """
         loss = self.criterion(img_emb, cap_emb)
-        # self.logger.update('Le', loss.data[0], img_emb.size(0))
-        self.logger.update('Le_retrieval', loss.data[0], img_emb.size(0))
+        # self.logger.update('Le', loss.item(), img_emb.size(0))
+        self.logger.update('Le_retrieval', loss.item(), img_emb.size(0))
         return loss
 
     def train_emb(self, images, captions, lengths, ids, caption_labels, caption_masks, *args):
@@ -566,8 +566,8 @@ class VSRN(object):
         loss = retrieval_loss + caption_loss
 
 
-        self.logger.update('Le_caption', caption_loss.data[0], img_emb.size(0))
-        self.logger.update('Le', loss.data[0], img_emb.size(0))
+        self.logger.update('Le_caption', caption_loss.item(), img_emb.size(0))
+        self.logger.update('Le', loss.item(), img_emb.size(0))
 
         # compute gradient and do SGD step
         loss.backward()

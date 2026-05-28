@@ -10,7 +10,15 @@ from vocab import Vocabulary  # NOQA
 from model import VSRN
 from evaluation import i2t, t2i, AverageMeter, LogCollector, encode_data
 import logging
-import tensorboard_logger as tb_logger
+try:
+    import tensorboard_logger as tb_logger
+except ImportError:
+    class _NoOpTensorboardLogger(object):
+        def configure(self, *args, **kwargs):
+            pass
+        def log_value(self, *args, **kwargs):
+            pass
+    tb_logger = _NoOpTensorboardLogger()
 import argparse
 
 

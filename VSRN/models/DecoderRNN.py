@@ -34,10 +34,10 @@ class DecoderRNN(nn.Module):
                  rnn_dropout_p=0.1):
         super(DecoderRNN, self).__init__()
 
-        self.bidirectional_encoder = bidirectional
+        self.bidirectional_encoder = bool(bidirectional)
 
         self.dim_output = vocab_size
-        self.dim_hidden = dim_hidden * 2 if bidirectional else dim_hidden
+        self.dim_hidden = dim_hidden * 2 if self.bidirectional_encoder else dim_hidden
         self.dim_word = dim_word
         self.max_length = max_len
         self.sos_id = 1
@@ -117,8 +117,8 @@ class DecoderRNN(nn.Module):
                     it = torch.LongTensor([self.sos_id] * batch_size).cuda()
                 elif sample_max:
                     sampleLogprobs, it = torch.max(logprobs, 1)
-                    seq_logprobs.append(sampleLogprobs.view(-1, 1))
-                    it = it.view(-1).long()
+                    seq_logprobs.append(sampleLogprobs.reshape(-1, 1))
+                    it = it.reshape(-1).long()
 
                 else:
                     # sample according to distribuition
@@ -129,10 +129,10 @@ class DecoderRNN(nn.Module):
                         prob_prev = torch.exp(torch.div(logprobs, temperature))
                     it = torch.multinomial(prob_prev, 1).cuda()
                     sampleLogprobs = logprobs.gather(1, it)
-                    seq_logprobs.append(sampleLogprobs.view(-1, 1))
-                    it = it.view(-1).long()
+                    seq_logprobs.append(sampleLogprobs.reshape(-1, 1))
+                    it = it.reshape(-1).long()
 
-                seq_preds.append(it.view(-1, 1))
+                seq_preds.append(it.reshape(-1, 1))
 
                 xt = self.embedding(it)
                 decoder_input = torch.cat([xt, context], dim=1)

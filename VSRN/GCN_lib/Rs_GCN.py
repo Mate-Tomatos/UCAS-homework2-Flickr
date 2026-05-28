@@ -58,19 +58,19 @@ class Rs_GCN(nn.Module):
         '''
         batch_size = v.size(0)
 
-        g_v = self.g(v).view(batch_size, self.inter_channels, -1)
+        g_v = self.g(v).reshape(batch_size, self.inter_channels, -1)
         g_v = g_v.permute(0, 2, 1)
 
-        theta_v = self.theta(v).view(batch_size, self.inter_channels, -1)
+        theta_v = self.theta(v).reshape(batch_size, self.inter_channels, -1)
         theta_v = theta_v.permute(0, 2, 1)
-        phi_v = self.phi(v).view(batch_size, self.inter_channels, -1)
+        phi_v = self.phi(v).reshape(batch_size, self.inter_channels, -1)
         R = torch.matmul(theta_v, phi_v)
         N = R.size(-1)
         R_div_C = R / N
 
         y = torch.matmul(R_div_C, g_v)
         y = y.permute(0, 2, 1).contiguous()
-        y = y.view(batch_size, self.inter_channels, *v.size()[2:])
+        y = y.reshape(batch_size, self.inter_channels, *v.size()[2:])
         W_y = self.W(y)
         v_star = W_y + v
 

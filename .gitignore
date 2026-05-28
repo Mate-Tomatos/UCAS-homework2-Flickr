@@ -1,6 +1,7 @@
 # 数据与模型产物
 datasets/
 results/
+logs/
 runs/
 checkpoints/
 pretrain_model/

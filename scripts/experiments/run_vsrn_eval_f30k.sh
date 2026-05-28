@@ -6,7 +6,7 @@ VSRN_DIR="${ROOT}/VSRN"
 DATA_PATH="${ROOT}/datasets/scan/data"
 MODEL_PATH="${1:-${VSRN_DIR}/runs/flickr_VSRN/model_best.pth.tar}"
 
-source /mnt/kxh/miniconda3/bin/activate vsrn_py37
+source /mnt/kxh/miniconda3/bin/activate trl
 export CUDA_VISIBLE_DEVICES="${CUDA_VISIBLE_DEVICES:-6}"
 export PYTHONUNBUFFERED=1
 export PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=python

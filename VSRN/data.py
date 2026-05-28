@@ -4,7 +4,10 @@ import torchvision.transforms as transforms
 import os
 import nltk
 from PIL import Image
-from pycocotools.coco import COCO
+try:
+    from pycocotools.coco import COCO
+except ImportError:
+    COCO = None
 import numpy as np
 import json as jsonmod
 
@@ -13,6 +16,10 @@ def _to_text(value):
     if isinstance(value, bytes):
         return value.decode('utf-8')
     return str(value)
+
+
+def _tokenize_caption(value):
+    return nltk.tokenize.word_tokenize(_to_text(value).lower(), preserve_line=True)
 
 
 def get_paths(path, name='coco', use_restval=False):
@@ -94,6 +101,8 @@ class CocoDataset(data.Dataset):
         """
         self.root = root
         # when using `restval`, two json files are needed
+        if COCO is None:
+            raise ImportError('pycocotools is required for COCO raw-image datasets')
         if isinstance(json, tuple):
             self.coco = (COCO(json[0]), COCO(json[1]))
         else:
@@ -208,20 +217,19 @@ class PrecompDataset(data.Dataset):
 
         # Captions
         self.captions = []
-        token_caption = []
+        self.tokens = []
         with open(loc+'%s_caps.txt' % data_split, 'rb') as f:
             for line in f:
                 caption = _to_text(line.strip())
                 self.captions.append(caption)
-                tokens = nltk.tokenize.word_tokenize(caption.lower())
-                token_caption.append(tokens)        
+                self.tokens.append(_tokenize_caption(caption))
 
-        each_cap_lengths = [len(cap) for cap in token_caption]
+        each_cap_lengths = [len(cap) for cap in self.tokens]
         calculate_max_len = max(each_cap_lengths) + 2
         print(calculate_max_len)
 
         # Image features
-        self.images = np.load(loc+'%s_ims.npy' % data_split)
+        self.images = np.load(loc+'%s_ims.npy' % data_split, mmap_mode='r')
         self.length = len(self.captions)
         # rkiros data has redundancy in images, we divide by 5, 10crop doesn't
         if self.images.shape[0] != self.length:
@@ -242,7 +250,7 @@ class PrecompDataset(data.Dataset):
         vocab = self.vocab
 
         # Convert caption (string) to word ids.
-        tokens = nltk.tokenize.word_tokenize(_to_text(caption).lower())
+        tokens = self.tokens[index]
         caption = []
         caption.append(vocab('<start>'))
         caption.extend([vocab(token) for token in tokens])

@@ -2,7 +2,10 @@
 import nltk
 import pickle
 from collections import Counter
-from pycocotools.coco import COCO
+try:
+    from pycocotools.coco import COCO
+except ImportError:
+    COCO = None
 import json
 import argparse
 import os
@@ -43,6 +46,8 @@ class Vocabulary(object):
 
 
 def from_coco_json(path):
+    if COCO is None:
+        raise ImportError('pycocotools is required to build COCO vocab')
     coco = COCO(path)
     ids = coco.anns.keys()
     captions = []

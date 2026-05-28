@@ -153,7 +153,7 @@ def evalrank(model_path, model_path2, data_path=None, split='dev', fold5=False):
     img_embs2, cap_embs2 = encode_data(model2, data_loader)
 
     print('Images: %d, Captions: %d' %
-          (img_embs.shape[0] / 5, cap_embs.shape[0]))
+          (img_embs.shape[0] // 5, cap_embs.shape[0]))
 
     if not fold5:
         # no cross-validation, full evaluation
@@ -211,7 +211,7 @@ def i2t(images, captions, images2, captions2, npts=None, measure='cosine', retur
     Captions: (5N, K) matrix of captions
     """
     if npts is None:
-        npts = images.shape[0] / 5
+        npts = images.shape[0] // 5
     index_list = []
 
     ranks = numpy.zeros(npts)
@@ -267,7 +267,7 @@ def t2i(images, captions, images2, captions2, npts=None, measure='cosine', retur
     Captions: (5N, K) matrix of captions
     """
     if npts is None:
-        npts = images.shape[0] / 5
+        npts = images.shape[0] // 5
     ims = numpy.array([images[i] for i in range(0, len(images), 5)])
 
     ims2 = numpy.array([images2[i] for i in range(0, len(images2), 5)])
