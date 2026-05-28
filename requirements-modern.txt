@@ -1,0 +1,9 @@
+# 加分项 CLIP 评测所需现代环境依赖。
+# 本机 /mnt/kxh/miniconda3/envs/trl 已满足这些版本或更新版本。
+torch>=2.0
+torchvision>=0.15
+transformers>=4.30
+datasets>=2.0
+huggingface_hub>=0.20
+pillow
+numpy

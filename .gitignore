@@ -1,0 +1,33 @@
+# 数据与模型产物
+datasets/
+results/
+runs/
+checkpoints/
+pretrain_model/
+*.pth
+*.pth.tar
+*.pt
+*.zip
+*.tar
+*.tar.gz
+*.incomplete
+*.aria2
+*.so
+*.o
+*.egg
+*.jar
+*.mexa64
+*.mexmaci64
+build/
+dist/
+*.egg-info/
+
+# Python 缓存
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+
+# 本地提交产物
+submission/
+.vsrn_upstream_git/
