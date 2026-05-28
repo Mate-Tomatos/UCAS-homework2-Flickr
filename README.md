@@ -139,6 +139,12 @@ cd /mnt/kxh/smx/homework/h2
 - `text_to_image_r1/r5/r10`
 - `rsum`
 
+当前全量 test split 已完成一次评测，结果为：
+
+| 模型 | Image-to-Text R@1 | R@5 | R@10 | Text-to-Image R@1 | R@5 | R@10 | RSum |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| `openai/clip-vit-base-patch32` | 79.40 | 95.00 | 98.10 | 58.84 | 83.46 | 90.04 | 504.84 |
+
 ## 提交打包
 
 按课程要求，最终需要改名为：
