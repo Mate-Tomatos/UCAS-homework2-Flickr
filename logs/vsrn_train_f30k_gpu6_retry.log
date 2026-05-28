@@ -1,0 +1,14 @@
+nohup: ignoring input
+Namespace(batch_size=128, bidirectional=0, cnn_type='vgg19', crop_size=224, data_name='f30k_precomp', data_path='/mnt/kxh/smx/homework/h2/datasets/scan/data', dim_hidden=512, dim_vid=2048, dim_word=300, embed_size=2048, finetune=False, grad_clip=2.0, img_dim=2048, input_dropout_p=0.2, learning_rate=0.0002, log_step=10, logger_name='runs/flickr_VSRN', lr_update=10, margin=0.2, max_len=60, max_violation=True, measure='cosine', no_imgnorm=False, num_epochs=30, num_layers=1, reset_train=False, resume='', rnn_dropout_p=0.5, rnn_type='gru', use_abs=False, use_restval=False, val_step=500, vocab_path='./vocab/', word_dim=300, workers=10)
+Traceback (most recent call last):
+  File "train.py", line 312, in <module>
+    main()
+  File "train.py", line 133, in main
+    opt.data_name, vocab, opt.crop_size, opt.batch_size, opt.workers, opt)
+  File "/mnt/kxh/smx/homework/h2/VSRN/data.py", line 376, in get_loaders
+    batch_size, True, workers)
+  File "/mnt/kxh/smx/homework/h2/VSRN/data.py", line 342, in get_precomp_loader
+    dset = PrecompDataset(data_path, data_split, vocab, opt)
+  File "/mnt/kxh/smx/homework/h2/VSRN/data.py", line 209, in __init__
+    tokens = nltk.tokenize.word_tokenize(str(line.strip()).lower().decode('utf-8'))
+AttributeError: 'str' object has no attribute 'decode'

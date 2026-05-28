@@ -1,0 +1,50 @@
+[1/4] data check
+标注图片数: 31014
+标注 caption 数: 155070
+本地图片数: 31783
+split 图片数: {'test': 1000, 'train': 29000, 'val': 1014}
+split caption 数: {'test': 5000, 'train': 145000, 'val': 5070}
+缺失图片数: 0
+[2/4] CLIP zero-shot Flickr30k test
+Using a slow image processor as `use_fast` is unset and a slow processor was saved with this model. `use_fast=True` will be the default behavior in v4.52, even if the model was saved with a slow processor. This will result in minor differences in outputs. You'll still be able to use a slow processor with `use_fast=False`.
+{
+  "model_name": "openai/clip-vit-base-patch32",
+  "split": "test",
+  "num_images": 1000,
+  "num_captions": 5000,
+  "metrics": {
+    "image_to_text_r1": 79.4,
+    "image_to_text_r5": 95.0,
+    "image_to_text_r10": 98.1,
+    "text_to_image_r1": 58.84,
+    "text_to_image_r5": 83.46,
+    "text_to_image_r10": 90.04,
+    "rsum": 504.84000000000003
+  }
+}
+[3/4] VSRN Flickr30k training
+Traceback (most recent call last):
+  File "/mnt/kxh/miniconda3/envs/vsrn_py37/lib/python3.7/site-packages/tensorboard_logger/tensorboard_logger.py", line 19, in <module>
+    from tensorflow.core.util import event_pb2
+ModuleNotFoundError: No module named 'tensorflow'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "train.py", line 13, in <module>
+    import tensorboard_logger as tb_logger
+  File "/mnt/kxh/miniconda3/envs/vsrn_py37/lib/python3.7/site-packages/tensorboard_logger/__init__.py", line 3, in <module>
+    from .tensorboard_logger import *
+  File "/mnt/kxh/miniconda3/envs/vsrn_py37/lib/python3.7/site-packages/tensorboard_logger/tensorboard_logger.py", line 22, in <module>
+    from .tf_protobuf import summary_pb2, event_pb2
+  File "/mnt/kxh/miniconda3/envs/vsrn_py37/lib/python3.7/site-packages/tensorboard_logger/tf_protobuf/summary_pb2.py", line 42, in <module>
+    options=None),
+  File "/mnt/kxh/miniconda3/envs/vsrn_py37/lib/python3.7/site-packages/google/protobuf/descriptor.py", line 561, in __new__
+    _message.Message._CheckCalledFromGeneratedFile()
+TypeError: Descriptors cannot not be created directly.
+If this call came from a _pb2.py file, your generated code is out of date and must be regenerated with protoc >= 3.19.0.
+If you cannot immediately regenerate your protos, some other possible workarounds are:
+ 1. Downgrade the protobuf package to 3.20.x or lower.
+ 2. Set PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=python (but this will use pure-Python parsing and will be much slower).
+
+More information: https://developers.google.com/protocol-buffers/docs/news/2022-05-06#python-updates

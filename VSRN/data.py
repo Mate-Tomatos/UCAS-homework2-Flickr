@@ -9,6 +9,12 @@ import numpy as np
 import json as jsonmod
 
 
+def _to_text(value):
+    if isinstance(value, bytes):
+        return value.decode('utf-8')
+    return str(value)
+
+
 def get_paths(path, name='coco', use_restval=False):
     """
     Returns paths to images and annotations for the given datasets. For MSCOCO
@@ -119,7 +125,7 @@ class CocoDataset(data.Dataset):
 
         # Convert caption (string) to word ids.
         tokens = nltk.tokenize.word_tokenize(
-            str(caption).lower().decode('utf-8'))
+            _to_text(caption).lower())
         caption = []
         caption.append(vocab('<start>'))
         caption.extend([vocab(token) for token in tokens])
@@ -178,7 +184,7 @@ class FlickrDataset(data.Dataset):
 
         # Convert caption (string) to word ids.
         tokens = nltk.tokenize.word_tokenize(
-            str(caption).lower().decode('utf-8'))
+            _to_text(caption).lower())
         caption = []
         caption.append(vocab('<start>'))
         caption.extend([vocab(token) for token in tokens])
@@ -205,8 +211,9 @@ class PrecompDataset(data.Dataset):
         token_caption = []
         with open(loc+'%s_caps.txt' % data_split, 'rb') as f:
             for line in f:
-                self.captions.append(line.strip())
-                tokens = nltk.tokenize.word_tokenize(str(line.strip()).lower().decode('utf-8'))
+                caption = _to_text(line.strip())
+                self.captions.append(caption)
+                tokens = nltk.tokenize.word_tokenize(caption.lower())
                 token_caption.append(tokens)        
 
         each_cap_lengths = [len(cap) for cap in token_caption]
@@ -229,14 +236,13 @@ class PrecompDataset(data.Dataset):
 
     def __getitem__(self, index):
         # handle the image redundancy
-        img_id = index/self.im_div
+        img_id = index // self.im_div
         image = torch.Tensor(self.images[img_id])
         caption = self.captions[index]
         vocab = self.vocab
 
         # Convert caption (string) to word ids.
-        tokens = nltk.tokenize.word_tokenize(
-            str(caption).lower().decode('utf-8'))
+        tokens = nltk.tokenize.word_tokenize(_to_text(caption).lower())
         caption = []
         caption.append(vocab('<start>'))
         caption.extend([vocab(token) for token in tokens])
